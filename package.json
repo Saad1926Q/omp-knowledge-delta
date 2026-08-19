@@ -1,0 +1,23 @@
+{
+  "name": "omp-knowledge-delta",
+  "version": "0.1.0",
+  "description": "Profile-aware research triage for Oh My Pi",
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "omp": {
+    "extensions": [
+      "./src/index.js"
+    ]
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

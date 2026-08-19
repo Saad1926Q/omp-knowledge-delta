@@ -1,0 +1,8 @@
+node_modules/
+coverage/
+*.log
+
+# Local user data should never enter the repository.
+research-profile.md
+research-ledger.md
+research-compass/
