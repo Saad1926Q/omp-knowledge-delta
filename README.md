@@ -48,6 +48,37 @@ Set `PI_CODING_AGENT_DIR` to use another OMP agent directory. The extension
 keeps a backup when updating an existing profile and never writes profile data
 into the Git repository.
 
+## Research triage
+
+Run:
+
+```text
+/research-triage https://example.com/paper
+/research-triage
+```
+
+The command also accepts pasted text or a social-media claim. It uses the
+research profile to produce a bounded prior context, explain the source's
+knowledge delta, separate claims from evidence, and recommend one attention
+tier:
+
+```text
+T0 discard
+T1 radar
+T2 focused read
+T3 deep study
+```
+
+After the triage response, ask follow-up questions as ordinary messages in
+the same OMP session. Use `/research-triage` again only for a new source.
+
+The result is not saved automatically. Ask the model to save or record it when
+you want a confirmed ledger entry. Ledger data is stored locally under:
+
+```text
+~/.omp/agent/knowledge-delta/research-ledger.md
+```
+
 ## Development
 
 ```bash
