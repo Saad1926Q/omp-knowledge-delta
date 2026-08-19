@@ -127,7 +127,11 @@ describe("extension registration", () => {
     );
     assert.deepEqual(
       tools.map(({ name }) => name),
-      ["research_profile_read", "research_profile_update"],
+      [
+        "research_profile_read",
+        "research_profile_update",
+        "research_ledger_append",
+      ],
     );
   });
 });

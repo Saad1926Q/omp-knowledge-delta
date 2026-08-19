@@ -47,7 +47,7 @@ function dateStamp(value) {
   return date.toISOString().slice(0, 10).replaceAll("-", "");
 }
 
-function nextEntryId(content, date) {
+export function nextLedgerEntryId(content, date) {
   const stamp = dateStamp(date);
   const expression = new RegExp(`^##\\s+R-${stamp}-(\\d+)(?:\\s|—)`, "gm");
   let next = 1;
@@ -124,7 +124,10 @@ async function writeLedger(content, path) {
 export async function appendLedgerEntry(entry, options = {}) {
   const resolved = optionsWithDefaults(options);
   const existing = await readLedger(resolved);
-  const id = clean(entry.id) || nextEntryId(existing.content, resolved.now);
+  if (Object.hasOwn(options, "expectedContent") && existing.content !== options.expectedContent) {
+    throw new Error("Research ledger changed while the entry was pending");
+  }
+  const id = clean(entry.id) || nextLedgerEntryId(existing.content, resolved.now);
   const rendered = renderLedgerEntry({
     ...entry,
     id,

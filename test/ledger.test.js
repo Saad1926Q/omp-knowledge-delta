@@ -76,4 +76,31 @@ describe("research ledger storage", () => {
     assert.equal((await readLedger(options)).content.includes("Second delta."), true);
     assert.equal(await stat(`${second.path}.bak`).then(() => true), true);
   });
+  it("rejects an append when the ledger changed after the preview", async () => {
+    const options = await testOptions();
+    const first = await appendLedgerEntry({
+      title: "Existing paper",
+      source: "https://example.com/existing",
+      attention: "T1",
+      content: "### Delta\n\nExisting delta.",
+    }, options);
+
+    await assert.rejects(
+      appendLedgerEntry(
+        {
+          title: "Stale paper",
+          source: "https://example.com/stale",
+          attention: "T2",
+          content: "### Delta\n\nStale delta.",
+        },
+        {
+          ...options,
+          expectedContent: null,
+        },
+      ),
+      /ledger changed while the entry was pending/,
+    );
+    assert.match(await readFile(first.path, "utf8"), /Existing paper/);
+    assert.doesNotMatch(await readFile(first.path, "utf8"), /Stale paper/);
+  });
 });

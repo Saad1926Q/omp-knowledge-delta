@@ -13,6 +13,12 @@ import {
   buildTriagePrompt,
   triageCommandHelp,
 } from "./triage/prompt.js";
+import {
+  appendLedgerEntry,
+  nextLedgerEntryId,
+  readLedger,
+  renderLedgerEntry,
+} from "./ledger/storage.js";
 
 function isConfirmed(value) {
   return value === true || value?.confirmed === true;
@@ -274,6 +280,85 @@ export default function ompKnowledgeDelta(pi) {
           path: saved.path,
           backupPath: saved.backupPath,
           summary: params.summary ?? null,
+        },
+      };
+    },
+  });
+  pi.registerTool({
+    name: "research_ledger_append",
+    label: "Save Research Triage",
+    description: "Preview and, after explicit confirmation, append a triage result to the research ledger.",
+    parameters: z.object({
+      title: z.string(),
+      source: z.string(),
+      type: z.string().optional(),
+      attention: z.string(),
+      status: z.string().optional(),
+      project: z.string().optional(),
+      nextAction: z.string().optional(),
+      content: z.string(),
+    }),
+    approval: "write",
+    async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
+      const current = await readLedger();
+      const now = new Date();
+      const id = nextLedgerEntryId(current.content, now);
+      const preview = renderLedgerEntry({
+        ...params,
+        id,
+        captured: now.toISOString().slice(0, 10),
+      });
+
+      if (typeof ctx.ui?.confirm !== "function") {
+        return {
+          content: [{
+            type: "text",
+            text: "Triage result was not written because interactive confirmation is unavailable.\n\n" + preview,
+          }],
+          details: { changed: false, requiresConfirmation: true, path: current.path },
+        };
+      }
+
+      const confirmed = await ctx.ui.confirm(
+        "Save research triage to the ledger?",
+        preview,
+      );
+      if (!isConfirmed(confirmed)) {
+        return {
+          content: [{ type: "text", text: "Triage result was not saved." }],
+          details: { changed: false, path: current.path },
+        };
+      }
+
+      const latest = await readLedger();
+      if ((latest.content ?? "") !== (current.content ?? "")) {
+        return {
+          content: [{
+            type: "text",
+            text: "The research ledger changed while this result was pending. No entry was written; please request the save again.",
+          }],
+          details: { changed: false, stale: true, path: current.path },
+        };
+      }
+
+      const saved = await appendLedgerEntry(
+        {
+          ...params,
+          id,
+          captured: now.toISOString().slice(0, 10),
+        },
+        {
+          now,
+          expectedContent: current.content,
+        },
+      );
+      return {
+        content: [{ type: "text", text: `Triage result saved to ${saved.path} as ${saved.id}.` }],
+        details: {
+          changed: true,
+          id: saved.id,
+          path: saved.path,
+          backupPath: saved.backupPath,
         },
       };
     },
