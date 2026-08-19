@@ -9,28 +9,31 @@ import {
   readProfile,
   writeProfile,
 } from "./profile/storage.js";
+import {
+  buildTriagePrompt,
+  triageCommandHelp,
+} from "./triage/prompt.js";
 
 function isConfirmed(value) {
   return value === true || value?.confirmed === true;
 }
 
-async function collectInput(args, ctx) {
+async function collectInput(
+  args,
+  ctx,
+  title = "Research profile",
+  editorPlaceholder = "Tell me what should be captured",
+) {
   const provided = args.trim();
   if (provided) return provided;
 
   if (typeof ctx.ui?.editor === "function") {
-    const value = await ctx.ui.editor(
-      "Research profile",
-      "Tell me about your goals, projects, interests, or preferences.\n",
-    );
+    const value = await ctx.ui.editor(title, editorPlaceholder);
     if (typeof value === "string" && value.trim()) return value.trim();
   }
 
   if (typeof ctx.ui?.input === "function") {
-    const value = await ctx.ui.input(
-      "Research profile",
-      "Tell me what should be captured",
-    );
+    const value = await ctx.ui.input(title, editorPlaceholder);
     if (typeof value === "string" && value.trim()) return value.trim();
   }
 
@@ -108,6 +111,30 @@ async function handleDelete(ctx) {
   );
 }
 
+async function handleTriageCommand(pi, args, ctx) {
+  if (args.trim().toLowerCase() === "help") {
+    ctx.ui?.notify?.(triageCommandHelp(), "info");
+    return;
+  }
+
+  const source = await collectInput(
+    args,
+    ctx,
+    "Research source",
+    "Paste a URL or describe the post, paper, or claim to triage",
+  );
+  if (!source) {
+    ctx.ui?.notify?.(
+      "Nothing to triage. Provide a URL or pasted text after /research-triage.",
+      "warning",
+    );
+    return;
+  }
+
+  sendPrompt(pi, ctx, buildTriagePrompt({ source }));
+}
+
+
 async function handleProfileCommand(pi, args, ctx) {
   const { command, rest } = commandParts(args);
 
@@ -157,6 +184,10 @@ export default function ompKnowledgeDelta(pi) {
   pi.registerCommand("research-profile", {
     description: "Create, inspect, update, or delete the research profile",
     handler: handleProfileCommand,
+  });
+  pi.registerCommand("research-triage", {
+    description: "Triage a paper, post, blog, or pasted research claim",
+    handler: handleTriageCommand,
   });
 
   pi.registerTool({
@@ -249,4 +280,9 @@ export default function ompKnowledgeDelta(pi) {
   });
 }
 
-export { collectInput, commandParts, getProfilePath };
+export {
+  collectInput,
+  commandParts,
+  getProfilePath,
+  handleTriageCommand,
+};

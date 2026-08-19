@@ -91,7 +91,7 @@ describe("profile helpers", () => {
 });
 
 describe("extension registration", () => {
-  it("registers the profile command and guarded profile tools", () => {
+  it("registers the profile and triage commands with guarded profile tools", () => {
     const commands = [];
     const tools = [];
     const labels = [];
@@ -121,7 +121,10 @@ describe("extension registration", () => {
     ompKnowledgeDelta(pi);
 
     assert.deepEqual(labels, ["Knowledge Delta"]);
-    assert.deepEqual(commands.map(({ name }) => name), ["research-profile"]);
+    assert.deepEqual(
+      commands.map(({ name }) => name),
+      ["research-profile", "research-triage"],
+    );
     assert.deepEqual(
       tools.map(({ name }) => name),
       ["research_profile_read", "research_profile_update"],
