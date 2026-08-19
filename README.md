@@ -8,11 +8,28 @@ Keeping up with research can easily turn into collecting an endless backlog of p
 
 The goal is not to summarize and save more material. It is to reduce information overload and turn research discovery into deliberate learning.
 
-## Profile commands
+## Disclosure
 
-The first feature is a user-controlled research profile. Describe your
-goals, projects, interests, and background naturally; the extension proposes
-an update and asks for confirmation before saving it.
+This is AI-generated code, and I have not reviewed the code in detail. This is
+primarily a utility I made for myself, so I did not spend much time on code
+quality; I mainly wanted a working thing.
+
+## Profile workflow
+
+The first feature is a user-controlled research profile:
+
+1. Run `/research-profile` and describe your goals, projects, interests, and
+   background naturally.
+2. The model extracts relevant information and asks only essential follow-up
+   questions.
+3. The extension shows the proposed profile changes.
+4. The profile is saved only after explicit confirmation.
+
+Use `/research-profile update <text>` to propose changes later,
+`/research-profile show` to inspect the profile, and
+`/research-profile delete` to delete it after confirmation.
+
+## Profile commands
 
 ```text
 /research-profile
