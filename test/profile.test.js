@@ -91,10 +91,11 @@ describe("profile helpers", () => {
 });
 
 describe("extension registration", () => {
-  it("registers the profile and triage commands with guarded profile tools", () => {
+  it("registers the profile and triage commands with guarded profile tools", async () => {
     const commands = [];
     const tools = [];
     const labels = [];
+    const sent = [];
     const chainableString = () => ({
       optional() {
         return this;
@@ -116,6 +117,9 @@ describe("extension registration", () => {
       registerTool(definition) {
         tools.push(definition);
       },
+      sendUserMessage(prompt, options) {
+        sent.push({ prompt, options });
+      },
     };
 
     ompKnowledgeDelta(pi);
@@ -133,5 +137,13 @@ describe("extension registration", () => {
         "research_ledger_append",
       ],
     );
+    await commands
+      .find(({ name }) => name === "research-triage")
+      .definition.handler("A claim about retrieval", {
+        isIdle: () => true,
+        ui: { notify() {} },
+      });
+    assert.equal(sent.length, 1);
+    assert.match(sent[0].prompt, /A claim about retrieval/);
   });
 });

@@ -189,11 +189,11 @@ export default function ompKnowledgeDelta(pi) {
 
   pi.registerCommand("research-profile", {
     description: "Create, inspect, update, or delete the research profile",
-    handler: handleProfileCommand,
+    handler: (args, ctx) => handleProfileCommand(pi, args, ctx),
   });
   pi.registerCommand("research-triage", {
     description: "Triage a paper, post, blog, or pasted research claim",
-    handler: handleTriageCommand,
+    handler: (args, ctx) => handleTriageCommand(pi, args, ctx),
   });
 
   pi.registerTool({
