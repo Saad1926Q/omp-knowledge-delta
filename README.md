@@ -141,14 +141,7 @@ The repository does not contain personal profile or ledger data.
 
 Your profile acts as context for future research triage:
 
-```mermaid
-flowchart LR
-    A["Describe your goals, projects, interests, and background"] --> B["Create or update research profile"]
-    B --> C["Review proposed changes"]
-    C -->|Confirm| D["Save research profile"]
-    C -->|Modify| B
-    D --> E["Use as context for research triage"]
-```
+![Research profile workflow](images/research_profile.png)
 
 ### Research triage
 
@@ -156,16 +149,7 @@ Give the extension a blog post, paper, technical report, or social-media
 claim. It uses your profile to explain what is already known, what is new,
 and how much attention the source deserves:
 
-```mermaid
-flowchart LR
-    A["Paste a blog, paper, report, or post into /research-triage"] --> B["Research triage"]
-    P["Research profile"] --> B
-    B --> C["Establish relevant prior context"]
-    C --> D["Explain the knowledge delta"]
-    D --> E["Recommend: Discard, Skim, Focused read, or Deep study"]
-    E --> F["Ask follow-up questions in the same session"]
-    E --> G["Save to ledger after confirmation"]
-```
+![Research triage workflow](images/research_triage.png)
 
 ## Add to OMP
 
