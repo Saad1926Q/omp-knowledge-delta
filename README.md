@@ -26,8 +26,6 @@ The extension currently provides:
 - [x] Prior-context and knowledge-delta analysis
 - [x] Human-readable attention recommendations
 - [x] Confirmed saving to a local research ledger
-- [ ] Scholarly citation-graph and influential-work lookup
-- [ ] Browser or clipboard capture
 
 The goal is not to summarize and save more material. The goal is to reduce information overload and make research reading deliberate.
 
@@ -137,26 +135,62 @@ Set `PI_CODING_AGENT_DIR` to use another OMP agent directory. Profile updates an
 
 The repository does not contain personal profile or ledger data.
 
-## Architecture
+## How It Works
+
+### Research profile
+
+Your profile acts as context for future research triage:
 
 ```mermaid
 flowchart LR
-    U["You"] --> P["/research-profile"]
-    P --> PF["research-profile.md"]
-
-    U --> T["/research-triage URL or pasted text"]
-    PF --> M["OMP model plus reading and search tools"]
-    T --> M
-
-    M --> D["Decision card"]
-    D --> A["Discard, Skim, Focused read, or Deep study"]
-    D --> F["Normal follow-up messages<br/>in the same session"]
-    D --> S["Explicit save request"]
-    S --> C["Confirmation"]
-    C --> L["research-ledger.md"]
+    A["Describe your goals, projects, interests, and background"] --> B["Create or update research profile"]
+    B --> C["Review proposed changes"]
+    C -->|Confirm| D["Save research profile"]
+    C -->|Modify| B
+    D --> E["Use as context for research triage"]
 ```
 
-This README uses Mermaid because GitHub renders it directly without another service. An interactive tldraw version is possible later, but the current OMP integration is better treated as a text-and-tools workflow rather than assuming support for tldraw's interactive MCP App canvas.
+### Research triage
+
+Give the extension a blog post, paper, technical report, or social-media
+claim. It uses your profile to explain what is already known, what is new,
+and how much attention the source deserves:
+
+```mermaid
+flowchart LR
+    A["Paste a blog, paper, report, or post into /research-triage"] --> B["Research triage"]
+    P["Research profile"] --> B
+    B --> C["Establish relevant prior context"]
+    C --> D["Explain the knowledge delta"]
+    D --> E["Recommend: Discard, Skim, Focused read, or Deep study"]
+    E --> F["Ask follow-up questions in the same session"]
+    E --> G["Save to ledger after confirmation"]
+```
+
+## Add to OMP
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Saad1926Q/omp-knowledge-delta.git
+```
+
+Load it for one session:
+
+```bash
+omp --extension /path/to/omp-knowledge-delta
+```
+
+To load it automatically, add the repository path to
+`~/.omp/agent/config.yml`:
+
+```yaml
+extensions:
+  - /path/to/omp-knowledge-delta
+```
+
+Restart OMP after changing the configuration. The extension registers the
+`/research-profile` and `/research-triage` commands automatically.
 
 ## Development
 
@@ -164,11 +198,4 @@ Run the tests with:
 
 ```bash
 npm test
-```
-
-Load the repository persistently through OMP configuration:
-
-```yaml
-extensions:
-  - /home/sodakey/omp-knowledge-delta
 ```
