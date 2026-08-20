@@ -141,19 +141,19 @@ The repository does not contain personal profile or ledger data.
 
 ```mermaid
 flowchart LR
-    U[You] --> P[/research-profile]
-    P --> PF[research-profile.md]
+    U["You"] --> P["/research-profile"]
+    P --> PF["research-profile.md"]
 
-    U --> T[/research-triage URL or text]
-    PF --> M[OMP model plus reading and search tools]
+    U --> T["/research-triage URL or pasted text"]
+    PF --> M["OMP model plus reading and search tools"]
     T --> M
 
-    M --> D[Decision card]
-    D --> A[Discard, Skim, Focused read, or Deep study]
-    D --> F[Normal follow-up messages in the same session]
-    D --> S[Explicit save request]
-    S --> C[Confirmation]
-    C --> L[research-ledger.md]
+    M --> D["Decision card"]
+    D --> A["Discard, Skim, Focused read, or Deep study"]
+    D --> F["Normal follow-up messages<br/>in the same session"]
+    D --> S["Explicit save request"]
+    S --> C["Confirmation"]
+    C --> L["research-ledger.md"]
 ```
 
 This README uses Mermaid because GitHub renders it directly without another service. An interactive tldraw version is possible later, but the current OMP integration is better treated as a text-and-tools workflow rather than assuming support for tldraw's interactive MCP App canvas.
