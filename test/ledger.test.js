@@ -44,12 +44,12 @@ describe("research ledger storage", () => {
       title: "Example paper",
       source: "https://example.com/paper",
       captured: "2026-08-20",
-      attention: "T2",
+      attention: "Focused read",
       content: "### Delta\n\nThe method changes the baseline.",
     });
 
     assert.match(rendered, /^## R-20260820-001 — Example paper/m);
-    assert.match(rendered, /- Attention: T2/);
+    assert.match(rendered, /- Attention: Focused read/);
     assert.match(rendered, /### Delta/);
   });
 
@@ -58,13 +58,13 @@ describe("research ledger storage", () => {
     const first = await appendLedgerEntry({
       title: "First paper",
       source: "https://example.com/one",
-      attention: "T1",
+      attention: "Skim",
       content: "### Delta\n\nFirst delta.",
     }, options);
     const second = await appendLedgerEntry({
       title: "Second paper",
       source: "https://example.com/two",
-      attention: "T2",
+      attention: "Focused read",
       content: "### Delta\n\nSecond delta.",
     }, options);
 
@@ -81,7 +81,7 @@ describe("research ledger storage", () => {
     const first = await appendLedgerEntry({
       title: "Existing paper",
       source: "https://example.com/existing",
-      attention: "T1",
+      attention: "Skim",
       content: "### Delta\n\nExisting delta.",
     }, options);
 
@@ -90,7 +90,7 @@ describe("research ledger storage", () => {
         {
           title: "Stale paper",
           source: "https://example.com/stale",
-          attention: "T2",
+          attention: "Focused read",
           content: "### Delta\n\nStale delta.",
         },
         {

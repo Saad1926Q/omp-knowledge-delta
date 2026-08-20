@@ -72,7 +72,7 @@ export function renderLedgerEntry(entry) {
     `- Source: ${clean(entry.source) || "Not provided"}`,
     `- Captured: ${clean(entry.captured) || "Not recorded"}`,
     `- Type: ${clean(entry.type) || "unknown"}`,
-    `- Attention: ${clean(entry.attention) || "T1"}`,
+    `- Attention: ${clean(entry.attention) || "Skim"}`,
     `- Status: ${clean(entry.status) || "triaged"}`,
   ];
 

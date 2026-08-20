@@ -63,10 +63,10 @@ knowledge delta, separate claims from evidence, and recommend one attention
 tier:
 
 ```text
-T0 discard
-T1 radar
-T2 focused read
-T3 deep study
+Discard
+Skim
+Focused read
+Deep study
 ```
 
 After the triage response, ask follow-up questions as ordinary messages in

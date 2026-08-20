@@ -19,7 +19,7 @@ describe("research triage prompt", () => {
     });
 
     assert.match(prompt, /at most five justified anchor works/);
-    assert.match(prompt, /Recommend exactly one attention tier/);
+    assert.match(prompt, /Recommend exactly one attention level/);
     assert.match(prompt, /https:\/\/example\.com\/paper/);
     assert.match(prompt, /<source_input>/);
     assert.match(prompt, /\/tmp\/omp-agent\/knowledge-delta\/research-profile\.md/);
